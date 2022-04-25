@@ -1,6 +1,8 @@
 package org.zsz.algorithms.leetcode;
 
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
+import org.zsz.algorithms.support.ListNodeBuilder;
 
 /**
  * 83. 删除排序链表中的重复元素
@@ -10,13 +12,13 @@ import java.util.Objects;
  * @author Linus Zhang
  * @create 2022-04-25 00:03
  */
+@Slf4j
 public class Solution83 {
 
   public static void main(String[] args) {
-    ListNode l = new ListNode(1, new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(3)))));
+    ListNode l = ListNodeBuilder.create(ListNode.class).build("1,1,2,3,3");
     Solution83 s = new Solution83();
-    ListNode listNode = s.deleteDuplicates(l);
-    System.out.println(listNode);
+    log.info("ListNode -> {}", s.deleteDuplicates(l));
   }
 
   public ListNode deleteDuplicates(ListNode head) {
