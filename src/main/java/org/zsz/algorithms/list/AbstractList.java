@@ -38,16 +38,16 @@ public abstract class AbstractList<E> implements List<E> {
   }
 
   protected void rangeCheck(int index) {
-//        if (index < 0 || index >= size) {
-//            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-//        }
+//    if (index < 0 || index >= size) {
+//      throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+//    }
     Preconditions.checkElementIndex(index, size);
   }
 
   protected void rangeCheckForAdd(int index) {
-//        if (index < 0 || index > size) {
-//            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-//        }
+//    if (index < 0 || index > size) {
+//      throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+//    }
     Preconditions.checkPositionIndex(index, size);
   }
 

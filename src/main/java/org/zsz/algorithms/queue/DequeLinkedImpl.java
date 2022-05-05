@@ -4,15 +4,17 @@ import org.zsz.algorithms.list.LinkedList;
 
 /**
  * 双端队列
+ * <p>
+ * 链表实现
  *
  * @author Linus Zhang
  * @create 2022-04-26 23:43
  */
-public class DequeImpl<E> implements Deque<E> {
+public class DequeLinkedImpl<E> implements Deque<E> {
 
   private final LinkedList<E> list;
 
-  public DequeImpl() {
+  public DequeLinkedImpl() {
     this.list = new LinkedList<>();
   }
 

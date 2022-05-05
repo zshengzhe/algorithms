@@ -4,15 +4,17 @@ import org.zsz.algorithms.list.LinkedList;
 
 /**
  * 队列
+ * <p>
+ * 链表实现
  *
  * @author Linus Zhang
  * @create 2022-04-26 23:23
  */
-public class QueueImpl<E> implements Queue<E> {
+public class QueueLinkedImpl<E> implements Queue<E> {
 
   private final LinkedList<E> list;
 
-  public QueueImpl() {
+  public QueueLinkedImpl() {
     this.list = new LinkedList<>();
   }
 
