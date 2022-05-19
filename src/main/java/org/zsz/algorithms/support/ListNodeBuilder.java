@@ -15,7 +15,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 /**
  * 可以帮助构建ListNode
  * <p>
- * 需要接口中存在val和next字段
+ * 需要Node中存在val和next字段
  *
  * @author Linus Zhang
  * @create 2022-04-26 00:20
