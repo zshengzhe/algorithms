@@ -72,6 +72,7 @@ public class AvlTree<E> extends BinarySearchTree<E> {
     }
   }
 
+  @SuppressWarnings("unused")
   private void rebalance2(Node<E> grandNode) {
     AvlNode<E> grand = AvlNode.cast(grandNode);
     AvlNode<E> parent = grand.tallerChild();
