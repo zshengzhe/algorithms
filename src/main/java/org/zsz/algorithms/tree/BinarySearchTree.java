@@ -34,8 +34,9 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 
   public void add(E element) {
     if (Objects.isNull(root)) {
-      root = Node.create(assertNotNull(element));
+      root = createNode(assertNotNull(element));
       size++;
+      postAddProcess(root);
       return;
     }
 
@@ -54,13 +55,18 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
       node = cmp > 0 ? node.right : node.left;
     }
 
-    Node<E> newNode = Node.create(element, parent);
+    Node<E> newNode = createNode(element, parent);
     if (cmp > 0) {
       parent.right = newNode;
     } else {
       parent.left = newNode;
     }
     size++;
+    postAddProcess(newNode);
+  }
+
+  protected void postAddProcess(Node<E> node) {
+    // 子类可通过该方法调整结构
   }
 
   public void remove(E element) {
@@ -91,27 +97,37 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
         root = child;
       }
       // child在哪边让父节点指向谁
-      else if (node == parent.left) {
+      else if (node.isLeftChild()) {
         parent.left = child;
       } else {
         parent.right = child;
       }
+
+      postRemoveProcess(node);
     }
     // 根节点 度为0
     else if (Objects.isNull(parent)) {
       root = null;
+
+      postRemoveProcess(node);
     }
     // 叶子节点
     else {
       // child在哪边让父节点指向谁
-      if (node == parent.left) {
+      if (node.isLeftChild()) {
         parent.left = null;
       } else {
         parent.right = null;
       }
+
+      postRemoveProcess(node);
     }
 
     size--;
+  }
+
+  protected void postRemoveProcess(Node<E> node) {
+    // 子类可通过该方法调整结构
   }
 
   public boolean contains(E element) {

@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.zsz.algorithms.support.printer.BinaryTrees;
 import org.zsz.algorithms.test.entity.Person;
+import org.zsz.algorithms.tree.AvlTree;
 import org.zsz.algorithms.tree.BinarySearchTree;
 
 /**
@@ -122,28 +123,34 @@ public class TreeTest {
     Assert.assertFalse(tree.contains(7));
   }
 
-//
-//    @Test
-//    public void avlTreeAdd() {
-//        AvlTree<Integer> tree = new AvlTree<>();
-//        int[] data = {85, 19, 69, 3, 7, 99, 95, 2, 1, 70, 44, 58, 11, 21, 14,
-//                93, 57, 4, 56};
-//        Arrays.stream(data)
-//                .forEach(tree::add);
-//        System.out.println("------------------------");
-//        BinaryTrees.println(tree);
-//    }
-//
-//    @Test
-//    public void avlTreeRemove() {
-//        AvlTree<Integer> tree = new AvlTree<>();
-//        int[] data = {85, 19, 69, 3, 7, 99, 95};
-//        Arrays.stream(data)
-//                .forEach(tree::add);
-//        tree.remove(99);
-//        tree.remove(85);
-//        tree.remove(95);
-//        BinaryTrees.println(tree);
-//    }
+
+  @Test
+  public void avlTreeAdd() {
+    AvlTree<Integer> tree = new AvlTree<>();
+    int[] data = {85, 19, 69, 3, 7, 99, 95, 2, 1, 70, 44, 58, 11, 21, 14, 93, 57, 4, 56};
+    Arrays.stream(data)
+        .forEach(tree::add);
+    BinaryTrees.println(tree);
+    StringBuilder builder = new StringBuilder();
+    tree.preorder(e -> builder.append(e).append(", "));
+    String result = builder.delete(builder.length() - 2, builder.length()).toString();
+    Assert.assertEquals("19, 7, 2, 1, 3, 4, 11, 14, 69, 44, 21, 57, 56, 58, 95, 85, 70, 93, 99", result);
+  }
+
+  @Test
+  public void avlTreeRemove() {
+    AvlTree<Integer> tree = new AvlTree<>();
+    int[] data = {85, 19, 69, 3, 7, 99, 95};
+    Arrays.stream(data)
+        .forEach(tree::add);
+    tree.remove(99);
+    tree.remove(85);
+    tree.remove(95);
+    BinaryTrees.println(tree);
+    StringBuilder builder = new StringBuilder();
+    tree.preorder(e -> builder.append(e).append(", "));
+    String result = builder.delete(builder.length() - 2, builder.length()).toString();
+    Assert.assertEquals("7, 3, 69, 19", result);
+  }
 
 }

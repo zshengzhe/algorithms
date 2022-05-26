@@ -7,10 +7,11 @@ import java.util.Queue;
 import java.util.function.Consumer;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.zsz.algorithms.support.TypeSupport;
 import org.zsz.algorithms.support.printer.BinaryTreeInfo;
 
 /**
- * 二叉搜索树
+ * 二叉树
  *
  * @author Linus Zhang
  * @create 2022-05-16 22:54
@@ -28,6 +29,14 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 
   public boolean isEmpty() {
     return size == 0;
+  }
+
+  protected Node<E> createNode(E element) {
+    return Node.create(element);
+  }
+
+  protected Node<E> createNode(E element, Node<E> parent) {
+    return Node.create(element, parent);
   }
 
   /**
@@ -279,7 +288,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     static <E> Node<E> create(E element) {
-      return create(element, null);
+      return create(element, TypeSupport.returnNull());
     }
 
     boolean isLeaf() {
@@ -292,6 +301,14 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 
     boolean degreeTwo() {
       return Objects.nonNull(left) && Objects.nonNull(right);
+    }
+
+    boolean isLeftChild() {
+      return Objects.nonNull(parent) && this == parent.left;
+    }
+
+    boolean isRightChild() {
+      return Objects.nonNull(parent) && this == parent.right;
     }
 
     @Override
