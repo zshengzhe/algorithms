@@ -2,6 +2,7 @@ package org.zsz.algorithms.test.tree;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.IntConsumer;
 import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.zsz.algorithms.support.printer.BinaryTrees;
 import org.zsz.algorithms.test.entity.Person;
 import org.zsz.algorithms.tree.AvlTree;
 import org.zsz.algorithms.tree.BinarySearchTree;
+import org.zsz.algorithms.tree.RedBlackTree;
 
 /**
  * @author Zhang Shengzhe
@@ -126,7 +128,7 @@ public class TreeTest {
 
   @Test
   public void avlTreeAdd() {
-    AvlTree<Integer> tree = new AvlTree<>();
+    final AvlTree<Integer> tree = new AvlTree<>();
     int[] data = {85, 19, 69, 3, 7, 99, 95, 2, 1, 70, 44, 58, 11, 21, 14, 93, 57, 4, 56};
     Arrays.stream(data)
         .forEach(tree::add);
@@ -139,7 +141,7 @@ public class TreeTest {
 
   @Test
   public void avlTreeRemove() {
-    AvlTree<Integer> tree = new AvlTree<>();
+    final AvlTree<Integer> tree = new AvlTree<>();
     int[] data = {85, 19, 69, 3, 7, 99, 95};
     Arrays.stream(data)
         .forEach(tree::add);
@@ -151,6 +153,47 @@ public class TreeTest {
     tree.preorder(e -> builder.append(e).append(", "));
     String result = builder.delete(builder.length() - 2, builder.length()).toString();
     Assert.assertEquals("7, 3, 69, 19", result);
+  }
+
+  @Test
+  public void redBlackTreeAdd() {
+    final RedBlackTree<Integer> tree = new RedBlackTree<>();
+    int[] data = {55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50};
+
+    IntConsumer stepAdd = i -> {
+      System.out.printf("[%s]%n", i);
+      tree.add(i);
+      BinaryTrees.print(tree);
+      System.out.println("--------------------------");
+    };
+
+    Arrays.stream(data)
+        .forEach(stepAdd);
+
+    StringBuilder builder = new StringBuilder();
+    tree.preorder(e -> builder.append(e).append(", "));
+    String result = builder.delete(builder.length() - 2, builder.length()).toString();
+    Assert.assertEquals("70, 56, 22, 20, 55, 50, 62, 68, 87, 74, 96, 90", result);
+  }
+
+  @Test
+  public void redBlackTreeRemove() {
+    final RedBlackTree<Integer> tree = new RedBlackTree<>();
+    int[] data = {55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50};
+
+    Arrays.stream(data)
+        .forEach(tree::add);
+
+    IntConsumer stepRemove = i -> {
+      System.out.printf("[%s]%n", i);
+      tree.remove(i);
+      BinaryTrees.print(tree);
+      System.out.println("--------------------------");
+    };
+    Arrays.stream(data)
+        .forEach(stepRemove);
+
+    Assert.assertTrue(tree.isEmpty());
   }
 
 }

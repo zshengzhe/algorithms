@@ -16,7 +16,6 @@ import org.zsz.algorithms.support.printer.BinaryTreeInfo;
  * @author Linus Zhang
  * @create 2022-05-16 22:54
  */
-@SuppressWarnings("unchecked")
 public class BinaryTree<E> implements BinaryTreeInfo {
 
   protected int size;
@@ -256,17 +255,17 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 
   @Override
   public Object left(Object node) {
-    return ((Node<E>) node).left;
+    return Node.cast(node).left;
   }
 
   @Override
   public Object right(Object node) {
-    return ((Node<E>) node).right;
+    return Node.cast(node).right;
   }
 
   @Override
   public Object string(Object node) {
-    return ((Node<E>) node).element;
+    return Node.cast(node).toString();
   }
 
   @Data
@@ -285,6 +284,10 @@ public class BinaryTree<E> implements BinaryTreeInfo {
       return new Node<E>()
           .setElement(element)
           .setParent(parent);
+    }
+
+    static <E> Node<E> cast(Object node) {
+      return TypeSupport.unsafeCast(node);
     }
 
     static <E> Node<E> create(E element) {
@@ -311,11 +314,22 @@ public class BinaryTree<E> implements BinaryTreeInfo {
       return Objects.nonNull(parent) && this == parent.right;
     }
 
+    boolean isRoot() {
+      return Objects.isNull(parent);
+    }
+
+    Node<E> sibling() {
+      if (isLeftChild()) {
+        return parent.right;
+      } else if (isRightChild()) {
+        return parent.left;
+      }
+      return TypeSupport.returnNull();
+    }
+
     @Override
     public String toString() {
-      return "Node{" +
-          "element=" + element +
-          '}';
+      return element.toString();
     }
 
   }

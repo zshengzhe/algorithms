@@ -103,7 +103,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
         parent.right = child;
       }
 
-      postRemoveProcess(node);
+      postRemoveProcess(child);
     }
     // 根节点 度为0
     else if (Objects.isNull(parent)) {

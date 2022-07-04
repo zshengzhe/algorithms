@@ -2,7 +2,6 @@ package org.zsz.algorithms.tree;
 
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Optional;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -14,7 +13,7 @@ import org.zsz.algorithms.support.TypeSupport;
  * @author Linus Zhang
  * @create 2022-05-19 22:55
  */
-public class AvlTree<E> extends BinarySearchTree<E> {
+public class AvlTree<E> extends BalancedBinarySearchTree<E> {
 
   public AvlTree() {
     this(TypeSupport.returnNull());
@@ -42,29 +41,46 @@ public class AvlTree<E> extends BinarySearchTree<E> {
     }
   }
 
+  @Override
+  protected void postRemoveProcess(Node<E> node) {
+    while ((node = node.parent) != null) {
+      AvlNode<E> avlNode = AvlNode.cast(node);
+      // 平衡
+      if (avlNode.isBalanced()) {
+        // 更新高度
+        avlNode.updateHeight();
+      }
+      // 不平衡
+      else {
+        // 恢复平衡
+        rebalance(node);
+      }
+    }
+  }
+
   private void rebalance(Node<E> grandNode) {
     AvlNode<E> grand = AvlNode.cast(grandNode);
     AvlNode<E> parent = grand.tallerChild();
     AvlNode<E> node = parent.tallerChild();
-    // L
+    // L 左子树高
     if (parent.isLeftChild()) {
-      // LL
+      // LL 左子树的左子树高
       if (node.isLeftChild()) {
         rotateRight(grand);
       }
-      // LR
+      // LR 左子树的右子树高
       else {
         rotateLeft(parent);
         rotateRight(grand);
       }
     }
-    // R
+    // R 右子树高
     else {
-      // RR
+      // RR 右子树的右子树高
       if (node.isRightChild()) {
         rotateLeft(grand);
       }
-      // RL
+      // RL 右子树的左子树高
       else {
         rotateRight(parent);
         rotateLeft(grand);
@@ -101,100 +117,18 @@ public class AvlTree<E> extends BinarySearchTree<E> {
   }
 
   @Override
-  protected void postRemoveProcess(Node<E> node) {
-    while ((node = node.parent) != null) {
-      AvlNode<E> avlNode = AvlNode.cast(node);
-      // 平衡
-      if (avlNode.isBalanced()) {
-        // 更新高度
-        avlNode.updateHeight();
-      }
-      // 不平衡
-      else {
-        // 恢复平衡
-        rebalance(node);
-      }
-    }
-  }
-
-  private void rotate(Node<E> r,
-      Node<E> b, Node<E> c,
-      Node<E> d,
-      Node<E> e, Node<E> f) {
-    // d成为子树根节点
-    d.parent = r.parent;
-    if (r.isLeftChild()) {
-      r.parent.left = d;
-    } else if (r.isRightChild()) {
-      r.parent.right = d;
-    } else {
-      root = d;
-    }
-
-    //b-c
-    b.right = c;
-    Optional.ofNullable(c)
-        .ifPresent(n -> n.parent = b);
-    AvlNode.cast(b).updateHeight();
-
-    // e-f
-    f.left = e;
-    Optional.ofNullable(e)
-        .ifPresent(n -> n.parent = f);
-    AvlNode.cast(f).updateHeight();
-
-    // b-d-f
-    d.left = b;
-    d.right = f;
-    b.parent = d;
-    f.parent = d;
-    AvlNode.cast(d).updateHeight();
-  }
-
-  private void rotateLeft(Node<E> grand) {
-    Node<E> parent = grand.right;
-    Node<E> child = parent.left;
-
-    grand.right = child;
-    parent.left = grand;
-
-    postRotateProcess(grand, parent, child);
-  }
-
-  private void rotateRight(Node<E> grand) {
-    Node<E> parent = grand.left;
-    Node<E> child = parent.right;
-
-    grand.left = child;
-    parent.right = grand;
-
-    postRotateProcess(grand, parent, child);
-  }
-
-  private void postRotateProcess(Node<E> grand, Node<E> parent, Node<E> child) {
-    Node<E> ancestor = grand.parent;
-    // parent成为子树根节点
-    parent.parent = ancestor;
-    // grand在左
-    if (grand.isLeftChild()) {
-      ancestor.left = parent;
-    }
-    // if grand is right child
-    else if (grand.isRightChild()) {
-      ancestor.right = parent;
-    }
-    // grand is root
-    else {
-      root = parent;
-    }
-
-    grand.parent = parent;
-    if (Objects.nonNull(child)) {
-      child.parent = grand;
-    }
-
+  protected void postRotateProcess(Node<E> grand, Node<E> parent, Node<E> child) {
+    super.postRotateProcess(grand, parent, child);
     AvlNode.cast(grand).updateHeight();
     AvlNode.cast(parent).updateHeight();
+  }
+
+  @Override
+  protected void rotate(Node<E> r, Node<E> b, Node<E> c, Node<E> d, Node<E> e, Node<E> f) {
+    super.rotate(r, b, c, d, e, f);
+    AvlNode.cast(b).updateHeight();
+    AvlNode.cast(f).updateHeight();
+    AvlNode.cast(d).updateHeight();
   }
 
   @Override
