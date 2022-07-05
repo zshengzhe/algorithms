@@ -1,6 +1,7 @@
 package org.zsz.algorithms.list;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 
 /**
@@ -125,6 +126,14 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     return curr;
+  }
+
+  public void iterate(Consumer<E> processor) {
+    Node<E> curr = first;
+    while (Objects.nonNull(curr)) {
+      processor.accept(curr.element);
+      curr = curr.next;
+    }
   }
 
   @Override
