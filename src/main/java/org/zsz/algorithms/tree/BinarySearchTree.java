@@ -2,10 +2,8 @@ package org.zsz.algorithms.tree;
 
 import com.google.common.base.Preconditions;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.function.Supplier;
 
 /**
@@ -156,32 +154,6 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
     return Optional.ofNullable(comparator)
         .map(cmp -> cmp.compare(e1, e2))
         .orElseGet(compare);
-  }
-
-  public void clear() {
-    size = 0;
-    if (Objects.isNull(root)) {
-      return;
-    }
-
-    Queue<Node<E>> queue = new LinkedList<>();
-    queue.offer(root);
-    while (!queue.isEmpty()) {
-      Node<E> node = queue.poll();
-
-      Optional.ofNullable(node.left)
-          .ifPresent(queue::offer);
-
-      Optional.ofNullable(node.right)
-          .ifPresent(queue::offer);
-
-      // clear help gc
-      node.parent = null;
-      node.element = null;
-      node.left = null;
-      node.right = null;
-    }
-    root = null;
   }
 
 }

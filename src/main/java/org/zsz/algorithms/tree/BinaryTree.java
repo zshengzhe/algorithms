@@ -268,6 +268,33 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     return Node.cast(node).toString();
   }
 
+  public void clear() {
+    size = 0;
+
+    if (Objects.isNull(root)) {
+      return;
+    }
+
+    Queue<Node<E>> queue = new LinkedList<>();
+    queue.offer(root);
+    while (!queue.isEmpty()) {
+      Node<E> node = queue.poll();
+
+      Optional.ofNullable(node.left)
+          .ifPresent(queue::offer);
+
+      Optional.ofNullable(node.right)
+          .ifPresent(queue::offer);
+
+      // clear help gc
+      node.parent = null;
+      node.element = null;
+      node.left = null;
+      node.right = null;
+    }
+    root = null;
+  }
+
   @Data
   @Accessors(chain = true)
   protected static class Node<E> {
