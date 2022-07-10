@@ -11,6 +11,8 @@ import org.zsz.algorithms.map.TreeMap;
  */
 public class TreeSet<E> implements Set<E> {
 
+  private static final Object PRESENT = new Object();
+
   private final TreeMap<E, Object> map;
 
   public TreeSet() {
@@ -38,7 +40,7 @@ public class TreeSet<E> implements Set<E> {
 
   @Override
   public Set<E> add(E element) {
-    map.put(element, null);
+    map.put(element, PRESENT);
     return this;
   }
 
