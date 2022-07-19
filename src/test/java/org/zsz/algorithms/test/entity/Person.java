@@ -12,16 +12,33 @@ import lombok.Data;
 @AllArgsConstructor
 public class Person implements Comparable<Person> {
 
-    private int age;
-    private String name;
+  private int age;
+  private String name;
 
-    public Person(int age) {
-        this.age = age;
-    }
+  public Person(int age) {
+    this.age = age;
+  }
 
-    @Override
-    public int compareTo(Person person) {
-        return age - person.age;
+  @Override
+  public int compareTo(Person person) {
+    return age - person.age;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Person person = (Person) o;
+    return age == person.age && Objects.equal(name, person.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(age, name);
+  }
 
 }
