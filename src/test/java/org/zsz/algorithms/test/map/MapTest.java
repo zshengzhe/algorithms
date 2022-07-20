@@ -1,9 +1,11 @@
 package org.zsz.algorithms.test.map;
 
 import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.zsz.algorithms.map.HashMap;
+import org.zsz.algorithms.map.LinkedHashMap;
 import org.zsz.algorithms.map.Map;
 import org.zsz.algorithms.map.TreeMap;
 import org.zsz.algorithms.support.TypeSupport;
@@ -16,6 +18,7 @@ import org.zsz.algorithms.test.entity.SubKey2;
  * @author Linus Zhang
  * @create 2022-07-07 22:36
  */
+@Slf4j
 public class MapTest {
 
   @Test
@@ -26,7 +29,7 @@ public class MapTest {
     map.put("public", 8);
     map.put("text", 6);
     Assert.assertEquals(3, map.size());
-    map.iterate((k, v) -> System.out.printf("%s: %s%n", k, v));
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
   }
 
   @Test
@@ -38,7 +41,7 @@ public class MapTest {
     map.put("text", 6);
     map.remove("public");
     Assert.assertEquals(2, map.size());
-    map.iterate((k, v) -> System.out.printf("%s: %s%n", k, v));
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
   }
 
   @Test
@@ -55,7 +58,7 @@ public class MapTest {
     map.put(p4, "444");
     map.put(p5, "555");
     Assert.assertEquals(3, map.size());
-    map.iterate((k, v) -> System.out.printf("%s: %s%n", k, v));
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
   }
 
   @Test
@@ -74,7 +77,7 @@ public class MapTest {
     map.put(null, "666");
     Assert.assertEquals("555", map.get(p4));
     Assert.assertEquals("666", map.get(null));
-    map.iterate((k, v) -> System.out.printf("%s: %s%n", k, v));
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
   }
 
   @Test
@@ -93,7 +96,7 @@ public class MapTest {
     map.remove(p1);
 
     Assert.assertEquals(2, map.size());
-    map.iterate((k, v) -> System.out.printf("%s: %s%n", k, v));
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
   }
 
   @Test
@@ -143,4 +146,32 @@ public class MapTest {
     Assert.assertEquals(9999, (int) map.get(9999));
   }
 
+  @Test
+  public void testLinkedHashMapPut() {
+    Map<Integer, Integer> map = new LinkedHashMap<>();
+    IntStream.range(1, 11)
+        .forEach(i -> map.put(i, i));
+
+    Assert.assertEquals(1, (int) map.get(1));
+    Assert.assertEquals(10, (int) map.get(10));
+
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
+  }
+
+  @Test
+  public void testLinkedHashMapRemove() {
+    Map<Integer, Integer> map = new LinkedHashMap<>();
+    IntStream.range(1, 101)
+        .forEach(i -> map.put(i, i));
+    map.remove(1);
+    map.remove(10);
+    map.remove(20);
+    map.remove(30);
+    map.remove(40);
+    map.remove(100);
+    Assert.assertFalse(map.containsKey(1));
+    Assert.assertFalse(map.containsKey(100));
+
+    map.iterate((k, v) -> log.info("{}: {}", k, v));
+  }
 }

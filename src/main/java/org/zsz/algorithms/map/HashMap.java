@@ -96,7 +96,7 @@ public class HashMap<K, V> implements Map<K, V> {
     int index = index(key);
     Node<K, V> root = table[index];
     if (Objects.isNull(root)) {
-      root = Node.create(key, value);
+      root = createNode(key, value, TypeSupport.returnNull());
       table[index] = root;
       size++;
       postPutProcess(root);
@@ -146,7 +146,7 @@ public class HashMap<K, V> implements Map<K, V> {
       }
     } while (Objects.nonNull(node));
 
-    Node<K, V> newNode = Node.create(key, value, parent);
+    Node<K, V> newNode = createNode(key, value, parent);
     if (cmp > 0) {
       parent.right = newNode;
     } else {
@@ -229,8 +229,9 @@ public class HashMap<K, V> implements Map<K, V> {
     }
   }
 
-  private V remove(Node<K, V> node) {
+  protected V remove(Node<K, V> node) {
     V oldValue = node.value;
+    Node<K, V> willNode = node;
 
     // 度为2
     if (node.degreeTwo()) {
@@ -281,6 +282,8 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     size--;
+
+    afterRemove(willNode, node);
 
     return oldValue;
   }
@@ -438,9 +441,8 @@ public class HashMap<K, V> implements Map<K, V> {
   }
 
   private Optional<Node<K, V>> node(K key) {
-    return Optional.ofNullable(table[index(key)])
-        .map(node -> node(node, key))
-        .orElseGet(TypeSupport::returnNull);
+    final Node<K, V> root = table[index(key)];
+    return Objects.isNull(root) ? Optional.empty() : node(root, key);
   }
 
   private Optional<Node<K, V>> node(Node<K, V> node, K key) {
@@ -775,9 +777,16 @@ public class HashMap<K, V> implements Map<K, V> {
     postPutProcess(newNode);
   }
 
+  protected Node<K, V> createNode(K key, V value, Node<K, V> parent) {
+    return Node.create(key, value, parent);
+  }
+
+  protected void afterRemove(Node<K, V> willNode, Node<K, V> removedNode) {
+  }
+
   @Data
   @Accessors(chain = true)
-  private static class Node<K, V> {
+  protected static class Node<K, V> {
 
     int hash;
 
@@ -801,10 +810,6 @@ public class HashMap<K, V> implements Map<K, V> {
           .setValue(value)
           .setColor(RBColor.RED)
           .setParent(parent);
-    }
-
-    static <K, V> Node<K, V> create(K key, V value) {
-      return create(key, value, TypeSupport.returnNull());
     }
 
     static <K, V> Node<K, V> red(Node<K, V> node) {
@@ -879,7 +884,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
   }
 
-  private enum RBColor {
+  protected enum RBColor {
     /**
      * 红
      */
