@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.function.BiConsumer;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.zsz.algorithms.support.TypeSupport;
 import org.zsz.algorithms.support.printer.BinaryTreeInfo;
 import org.zsz.algorithms.support.printer.BinaryTrees;
@@ -18,6 +19,7 @@ import org.zsz.algorithms.support.printer.BinaryTrees;
  * @author Linus Zhang
  * @create 2022-07-11 21:29
  */
+@Slf4j
 @SuppressWarnings("unchecked")
 public class HashMap<K, V> implements Map<K, V> {
 
@@ -671,7 +673,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
     for (int i = 0; i < table.length; i++) {
       final Node<K, V> root = table[i];
-      System.out.println("【index = " + i + "】");
+      log.info("【index = {}】", i);
       BinaryTrees.println(new BinaryTreeInfo() {
         @Override
         public Object string(Object node) {
@@ -693,12 +695,12 @@ public class HashMap<K, V> implements Map<K, V> {
           return ((Node<K, V>) node).left;
         }
       });
-      System.out.println("---------------------------------------------------");
+      log.info("---------------------------------------------------");
     }
   }
 
   private void resize() {
-    if ((size / table.length) <= loadFactor) {
+    if (((float) size / table.length) <= loadFactor) {
       return;
     }
 
