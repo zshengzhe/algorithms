@@ -11,6 +11,8 @@ import org.zsz.algorithms.test.entity.Person;
 import org.zsz.algorithms.tree.AvlTree;
 import org.zsz.algorithms.tree.BinarySearchTree;
 import org.zsz.algorithms.tree.RedBlackTree;
+import org.zsz.algorithms.tree.Trie;
+import org.zsz.algorithms.tree.TrieImpl;
 
 /**
  * @author Zhang Shengzhe
@@ -194,6 +196,36 @@ public class TreeTest {
         .forEach(stepRemove);
 
     Assert.assertTrue(tree.isEmpty());
+  }
+
+  @Test
+  public void testTrie() {
+    Trie<Integer> trie = new TrieImpl<>();
+    trie.add("cat", 1);
+    trie.add("dog", 2);
+    trie.add("catalog", 3);
+    trie.add("cast", 4);
+    trie.add("linus", 5);
+
+    Assert.assertEquals(5, trie.size());
+    Assert.assertTrue(trie.startsWith("do"));
+    Assert.assertTrue(trie.startsWith("c"));
+    Assert.assertTrue(trie.startsWith("ca"));
+    Assert.assertTrue(trie.startsWith("cat"));
+    Assert.assertTrue(trie.startsWith("cata"));
+    Assert.assertFalse(trie.startsWith("hehe"));
+    Assert.assertEquals(5, (int) trie.get("linus"));
+    Assert.assertEquals(1, (int) trie.remove("cat"));
+    Assert.assertEquals(3, (int) trie.remove("catalog"));
+    Assert.assertEquals(4, (int) trie.remove("cast"));
+    Assert.assertEquals(2, trie.size());
+    Assert.assertTrue(trie.startsWith("linu"));
+    Assert.assertTrue(trie.startsWith("do"));
+    Assert.assertFalse(trie.startsWith("c"));
+    Assert.assertTrue(trie.contains("linus"));
+    Assert.assertFalse(trie.contains("li"));
+    trie.clear();
+    Assert.assertEquals(0, trie.size());
   }
 
 }
