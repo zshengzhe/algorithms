@@ -13,6 +13,7 @@ import org.zsz.algorithms.queue.DequeLinkedImpl;
 import org.zsz.algorithms.queue.Queue;
 import org.zsz.algorithms.queue.QueueLinkedImpl;
 import org.zsz.algorithms.support.Functions;
+import org.zsz.algorithms.support.Streams;
 
 /**
  * @author Zhang Shengzhe
@@ -85,7 +86,7 @@ public class QueueTest {
       Assert.assertSame(first, i);
       log.info("{}", first);
     };
-    Functions.rangeClosed(10, 1)
+    Streams.rangeClosed(10, 1)
         .forEach(preAssert);
 
     IntConsumer postAssert = i -> {
@@ -93,7 +94,7 @@ public class QueueTest {
       Assert.assertSame(first, i);
       log.info("{}", first);
     };
-    Functions.rangeClosed(110, 101)
+    Streams.rangeClosed(110, 101)
         .forEach(postAssert);
   }
 
